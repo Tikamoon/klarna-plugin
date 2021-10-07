@@ -1,0 +1,65 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    tikamoon.klarna.form.type.gateway_configuration:
+        class: Tikamoon\KlarnaPlugin\Form\Type\KlarnaGatewayConfigurationType
+        public: true
+        tags:
+            - { name: sylius.gateway_configuration_type, type: klarna, label: tikamoon.klarna.gateway_label }
+            - { name: form.type }
+
+    tikamoon.klarna.gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        public: true
+        arguments: [Tikamoon\KlarnaPlugin\KlarnaGatewayFactory]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: klarna }
+
+    tikamoon.klarna.action.capture:
+        class: Tikamoon\KlarnaPlugin\Action\CaptureAction
+        public: true
+        arguments:
+            - '@payum'
+            - '@monolog.logger'
+            - '@tikamoon.klarna.service.klarna'
+        tags:
+            - { name: payum.action, factory: klarna, alias: payum.action.capture }
+
+    tikamoon.klarna.action.status:
+        class: Tikamoon\KlarnaPlugin\Action\StatusAction
+        public: true
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: payum.action, factory: klarna, alias: payum.action.status }
+
+    tikamoon.klarna.bridge.klarna_bridge:
+        class: Tikamoon\KlarnaPlugin\Bridge\KlarnaBridge
+        public: true
+        arguments:
+            - '@request_stack'
+
+    tikamoon.klarna.action.resolve_next_route:
+        class: Tikamoon\KlarnaPlugin\Payum\Action\ResolveNextRouteAction
+        public: true
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: payum.action, factory: klarna, alias: payum.action.resolve_next_route }
+
+    tikamoon.klarna.service.klarna:
+        class: Tikamoon\KlarnaPlugin\Service\KlarnaService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@router'
+
+    Tikamoon\KlarnaPlugin\Twig\KlarnaExtension:
+        class: Tikamoon\KlarnaPlugin\Twig\KlarnaExtension
+        arguments:
+            - '@tikamoon.klarna.service.klarna'
+            - '%klarna_min_amounts%'
+            - '%klarna_max_amounts%'
+            - '%klarna_delays%'

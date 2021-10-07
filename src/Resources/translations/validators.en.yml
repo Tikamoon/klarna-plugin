@@ -1,0 +1,8 @@
+tikamoon:
+    klarna:
+        merchant_id:
+            not_blank: Enter merchant id
+        username:
+            not_blank: Enter username
+        password:
+            not_blank: Enter password

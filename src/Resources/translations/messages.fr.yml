@@ -1,0 +1,15 @@
+tikamoon:
+    klarna:
+        yes: Oui
+        no: Non
+        merchant_id: ID marchand
+        gateway_label: Klarna
+        environment: Environnement
+        production: Production
+        test: Test
+        username : Utilisateur
+        password : Mot de passe
+    payment:
+        completed: 'Le paiement a été effectué.'
+        failed: 'Le paiement a échoué.'
+        total: 'Total :'
