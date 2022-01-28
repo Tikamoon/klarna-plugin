@@ -50,7 +50,7 @@ class KlarnaExtension extends AbstractExtension
         $orderTotal = $order->getTotal();
         $minAmount = 0;
         $maxAmount = null;
-        $isDelayOK = in_array($order->getMaxDelay(), $this->klarnaDelays);
+        $isDelayOK = $order->getMaxDelay() <= max($this->klarnaDelays);
         $isAmountOK = false;
 
         foreach ($this->klarnaMinAmounts as $klarnaMethod => $klarnaMinAmount) {
