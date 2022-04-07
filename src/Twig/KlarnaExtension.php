@@ -20,15 +20,11 @@ class KlarnaExtension extends AbstractExtension
     /** @var array */
     private $klarnaMaxAmounts;
 
-    /** @var array */
-    private $klarnaDelays;
-
-    public function __construct(KlarnaService $klarnaService, array $klarnaMinAmounts, array $klarnaMaxAmounts, array $klarnaDelays)
+    public function __construct(KlarnaService $klarnaService, array $klarnaMinAmounts, array $klarnaMaxAmounts)
     {
         $this->klarnaService = $klarnaService;
         $this->klarnaMinAmounts = $klarnaMinAmounts;
         $this->klarnaMaxAmounts = $klarnaMaxAmounts;
-        $this->klarnaDelays = $klarnaDelays;
     }
 
     public function getFunctions(): array
@@ -50,7 +46,6 @@ class KlarnaExtension extends AbstractExtension
         $orderTotal = $order->getTotal();
         $minAmount = 0;
         $maxAmount = null;
-        $isDelayOK = $order->getMaxDelay() <= max($this->klarnaDelays);
         $isAmountOK = false;
 
         foreach ($this->klarnaMinAmounts as $klarnaMethod => $klarnaMinAmount) {
@@ -65,6 +60,6 @@ class KlarnaExtension extends AbstractExtension
             }
         }
 
-        return $isDelayOK && $isAmountOK;
+        return $isAmountOK;
     }
 }
