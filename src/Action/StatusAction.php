@@ -19,8 +19,9 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+        $modelArray = $model->getArrayCopy();
 
-        if (array_key_exists('place_order_response', $model)){
+        if (array_key_exists('place_order_response', $modelArray)){
             if (array_key_exists('error_code', $model['place_order_response'])) {
                 $request->markFailed();
     
